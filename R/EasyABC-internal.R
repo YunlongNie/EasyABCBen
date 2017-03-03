@@ -2467,7 +2467,7 @@
     seed_count = seed_count + 1
     if (verbose == TRUE) {
         intermed = c(as.numeric(param_ini), tab_simul_ini, as.numeric(dist_ini))
-        write(intermed, file = sprintf("%s_output_mcmc",outputname) ncolumns = length(intermed), append = T)
+        write(intermed, file = sprintf("%s_output_mcmc",outputname), ncolumns = length(intermed), append = T)
     }
     for (is in 2:n_obs) {
         for (i in 1:n_between_sampling) {

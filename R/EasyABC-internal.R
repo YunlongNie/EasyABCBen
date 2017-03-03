@@ -500,7 +500,7 @@
 
 ## PMC ABC algorithm: Beaumont et al. Biometrika 2009
 .ABC_PMC <- function(model, prior, prior_test, nb_simul, summary_stat_target, use_seed, 
-    verbose, dist_weights=NULL, seed_count = 0, inside_prior = TRUE, tolerance_tab = -1, progress_bar = FALSE, max_pick=10000) {
+    verbose, dist_weights=NULL, seed_count = 0, inside_prior = TRUE, tolerance_tab = -1, progress_bar = FALSE, max_pick=10000,outputname="Exp1") {
     ## checking errors in the inputs
     if (!is.vector(seed_count)) 
         stop("'seed_count' has to be a number.")
@@ -568,9 +568,9 @@
     tab_weight = array(1/nb_simul, nb_simul)
     intermediary_steps = list(NULL)
     if (verbose == TRUE) {
-        write.table(as.matrix(cbind(tab_weight, simul_below_tol)), file = "output_step1", 
+        write.table(as.matrix(cbind(tab_weight, simul_below_tol)), file = sprintf("%s_output_step1",outputname), 
             row.names = F, col.names = F, quote = F)
-        write.table(as.numeric(seed_count - seed_count_ini), file = "n_simul_tot_step1", 
+        write.table(as.numeric(seed_count - seed_count_ini), file = sprintf("%s_n_simul_tot_step1",outputname), 
             row.names = F, col.names = F, quote = F)
         intermediary_steps[[1]] = list(n_simul_tot = as.numeric(seed_count - seed_count_ini), 
             posterior = as.matrix(cbind(tab_weight, simul_below_tol)))
@@ -619,9 +619,9 @@
             }
         }
         if (verbose == TRUE) {
-            write.table(as.matrix(cbind(tab_weight, simul_below_tol)), file = paste("output_step", 
+            write.table(as.matrix(cbind(tab_weight, simul_below_tol)), file = paste(outputname,"_output_step", 
                 it, sep = ""), row.names = F, col.names = F, quote = F)
-            write.table(as.numeric(seed_count - seed_count_ini), file = paste("n_simul_tot_step", 
+            write.table(as.numeric(seed_count - seed_count_ini), file = paste(outputname,"_n_simul_tot_step", 
                 it, sep = ""), row.names = F, col.names = F, quote = F)
             intermediary_steps[[it]] = list(n_simul_tot = as.numeric(seed_count - 
                 seed_count_ini), posterior = as.matrix(cbind(tab_weight, simul_below_tol)))
@@ -1126,7 +1126,7 @@
 ## in each dimension (cf paragraph 3.2 in Del Moral et al. 2012)
 .ABC_Delmoral <- function(model, prior, prior_test, nb_simul, summary_stat_target, 
     use_seed, verbose, alpha = 0.9, M = 1, nb_threshold = floor(nb_simul/2), tolerance_target = -1, 
-    dist_weights=NULL, seed_count = 0, progress_bar = FALSE, max_pick=10000) {
+    dist_weights=NULL, seed_count = 0, progress_bar = FALSE, max_pick=10000,outputname="Exp1") {
     ## checking errors in the inputs
     if (!is.vector(alpha)) 
         stop("'alpha' has to be a number.")
@@ -1197,9 +1197,9 @@
     tab_weight2 = .replicate_tab(tab_weight, M)
     intermediary_steps = list(NULL)
     if (verbose == TRUE) {
-        write.table(as.matrix(cbind(tab_weight2, simul_below_tol)), file = "output_step1", 
+        write.table(as.matrix(cbind(tab_weight2, simul_below_tol)), file = sprintf("%s_output_step1",outputname), 
             row.names = F, col.names = F, quote = F)
-        write.table(as.numeric(seed_count - seed_count_ini), file = "n_simul_tot_step1", 
+        write.table(as.numeric(seed_count - seed_count_ini), file = sprintf("%s_n_simul_tot_step1",outputname), 
             row.names = F, col.names = F, quote = F)
         intermediary_steps[[1]] = list(n_simul_tot = as.numeric(seed_count - seed_count_ini), 
             posterior = as.matrix(cbind(tab_weight2, simul_below_tol)))
@@ -1381,11 +1381,11 @@
         tab_weight = .compute_weight_delmoral(particle_dist_mat, new_tolerance)
         tab_weight2 = .replicate_tab(tab_weight, M)
         if (verbose == TRUE) {
-            write.table(as.numeric(new_tolerance), file = paste("tolerance_step", 
+            write.table(as.numeric(new_tolerance), file = paste(outputname,"_tolerance_step", 
                 kstep, sep = ""), row.names = F, col.names = F, quote = F)
-            write.table(as.matrix(cbind(tab_weight2, simul_below_tol)), file = paste("output_step", 
+            write.table(as.matrix(cbind(tab_weight2, simul_below_tol)), file = paste(outputname,"_output_step", 
                 kstep, sep = ""), row.names = F, col.names = F, quote = F)
-            write.table(as.numeric(seed_count - seed_count_ini), file = paste("n_simul_tot_step", 
+            write.table(as.numeric(seed_count - seed_count_ini), file = paste(outputname,"_n_simul_tot_step", 
                 kstep, sep = ""), row.names = F, col.names = F, quote = F)
             intermediary_steps[[kstep]] = list(n_simul_tot = as.numeric(seed_count - 
                 seed_count_ini), tol_step = as.numeric(new_tolerance), posterior = as.matrix(cbind(tab_weight2, 
@@ -2196,7 +2196,7 @@
 ## ABC-MCMC algorithm of Marjoram et al. 2003
 .ABC_MCMC <- function(model, prior, prior_test, n_obs, n_between_sampling, summary_stat_target, 
     use_seed, verbose, dist_max = 0, tab_normalization = summary_stat_target, proposal_range = vector(mode = "numeric", 
-        length = length(prior)), dist_weights=NULL, seed_count = 0, progress_bar = FALSE, max_pick=10000) {
+        length = length(prior)), dist_weights=NULL, seed_count = 0, progress_bar = FALSE, max_pick=10000,outputname="Exp1") {
     ## checking errors in the inputs
     if (!is.vector(dist_max)) 
         stop("'dist_max' has to be a number.")
@@ -2282,9 +2282,9 @@
     param_ini = tab_param
     dist_ini = dist_simul
     if (verbose == TRUE) {
-        write.table(as.numeric(seed_count - seed_count_ini), file = "n_simul_tot_step1", 
+        write.table(as.numeric(seed_count - seed_count_ini), file = sprintf("%s_n_simul_tot_step1",outputname), 
             row.names = F, col.names = F, quote = F)
-        write.table(NULL, file = "output_mcmc", row.names = F, col.names = F, quote = F)
+        write.table(NULL, file = sprintf("%s_output_mcmc",outputname), row.names = F, col.names = F, quote = F)
     }
     if (progress_bar) {
         print("initial draw performed ")
@@ -2299,7 +2299,7 @@
     tab_dist = as.numeric(dist_ini)
     if (verbose == TRUE) {
         intermed = c(as.numeric(param_ini), tab_simul_ini, as.numeric(dist_ini))
-        write(intermed, file = "output_mcmc", ncolumns = length(intermed), append = T)
+        write(intermed, file = sprintf("%s_output_mcmc",outputname), ncolumns = length(intermed), append = T)
     }
     for (is in 2:n_obs) {
         for (i in 1:n_between_sampling) {
@@ -2326,7 +2326,7 @@
         tab_dist = rbind(tab_dist, as.numeric(dist_ini))
         if (verbose == TRUE) {
             intermed = c(as.numeric(param_ini), tab_simul_ini, as.numeric(dist_ini))
-            write(intermed, file = "output_mcmc", ncolumns = length(intermed), append = T)
+            write(intermed, file =sprintf("%s_output_mcmc",outputname), ncolumns = length(intermed), append = T)
         }
         if (progress_bar) {
             # for progressbar message and time evaluation
@@ -2372,7 +2372,7 @@
 ## tolerance and proposal range following Wegmann et al. 2009
 .ABC_MCMC2 <- function(model, prior, prior_test, n_obs, n_between_sampling, summary_stat_target, 
     use_seed, verbose, n_calibration = 10000, tolerance_quantile = 0.01, proposal_phi = 1, 
-    dist_weights=NULL, seed_count = 0, progress_bar = FALSE, max_pick=10000) {
+    dist_weights=NULL, seed_count = 0, progress_bar = FALSE, max_pick=10000,outputname="Exp1") {
     ## checking errors in the inputs
     if (!is.vector(n_calibration)) 
         stop("'n_calibration' has to be a number.")
@@ -2447,7 +2447,7 @@
     if (verbose == TRUE) {
         write.table((seed_count - seed_count_ini), file = "n_simul_tot_step1", row.names = F, 
             col.names = F, quote = F)
-        write.table(NULL, file = "output_mcmc", row.names = F, col.names = F, quote = F)
+        write.table(NULL, file = sprintf("%s_output_mcmc",outputname), row.names = F, col.names = F, quote = F)
     }
     if (progress_bar) {
         print("initial calibration performed ")
@@ -2467,7 +2467,7 @@
     seed_count = seed_count + 1
     if (verbose == TRUE) {
         intermed = c(as.numeric(param_ini), tab_simul_ini, as.numeric(dist_ini))
-        write(intermed, file = "output_mcmc", ncolumns = length(intermed), append = T)
+        write(intermed, file = sprintf("%s_output_mcmc",outputname) ncolumns = length(intermed), append = T)
     }
     for (is in 2:n_obs) {
         for (i in 1:n_between_sampling) {
@@ -2494,7 +2494,7 @@
         tab_dist[is] = as.numeric(dist_ini)
         if (verbose == TRUE) {
             intermed = c(as.numeric(param_ini), tab_simul_ini, as.numeric(dist_ini))
-            write(intermed, file = "output_mcmc", ncolumns = length(intermed), append = T)
+            write(intermed, file = sprintf("%s_output_mcmc",outputname), ncolumns = length(intermed), append = T)
         }
         if (progress_bar) {
             # for progressbar message and time evaluation
@@ -2541,7 +2541,7 @@
 ## are not implemented in the algorithm
 .ABC_MCMC3 <- function(model, prior, prior_test, n_obs, n_between_sampling, summary_stat_target, 
     use_seed, verbose, n_calibration = 10000, tolerance_quantile = 0.01, proposal_phi = 1, 
-    numcomp = 0, dist_weights=NULL, seed_count = 0, progress_bar = FALSE, max_pick=10000) {
+    numcomp = 0, dist_weights=NULL, seed_count = 0, progress_bar = FALSE, max_pick=10000,outputname="Exp1") {
     ## checking errors in the inputs
     if (!is.vector(n_calibration)) 
         stop("'n_calibration' has to be a number.")
@@ -2619,7 +2619,7 @@
     if (verbose) {
         write.table((seed_count - seed_count_ini), file = "n_simul_tot_step1", row.names = F, 
             col.names = F, quote = F)
-        write.table(NULL, file = "output_mcmc", row.names = F, col.names = F, quote = F)
+        write.table(NULL, file = sprintf("%s_output_mcmc",outputname), row.names = F, col.names = F, quote = F)
     }
     ## AM2: PLS step print('AM2 ') standardize the params
     sparam = as.matrix(tab_param)
@@ -2717,7 +2717,7 @@
     seed_count = seed_count + 1
     if (verbose == TRUE) {
         intermed = c(as.numeric(param_ini), tab_simul_ini, as.numeric(dist_ini))
-        write(intermed, file = "output_mcmc", ncolumns = length(intermed), append = T)
+        write(intermed, file = sprintf("%s_output_mcmc",outputname), ncolumns = length(intermed), append = T)
     }
     for (is in 2:n_obs) {
         for (i in 1:n_between_sampling) {
@@ -2760,7 +2760,7 @@
         tab_dist = rbind(tab_dist, as.numeric(dist_ini))
         if (verbose == TRUE) {
             intermed = c(as.numeric(param_ini), tab_simul_ini, as.numeric(dist_ini))
-            write(intermed, file = "output_mcmc", ncolumns = length(intermed), append = T)
+            write(intermed, file = sprintf("%s_output_mcmc",outputname), ncolumns = length(intermed), append = T)
         }
         if (progress_bar) {
             # for progressbar message and time evaluation
@@ -3147,7 +3147,7 @@
 ## PMC ABC algorithm: Beaumont et al. Biometrika 2009
 .ABC_PMC_cluster <- function(model, prior, prior_test, nb_simul, summary_stat_target, 
     n_cluster, verbose, dist_weights=NULL, seed_count = 0, inside_prior = TRUE, tolerance_tab = -1, 
-    progress_bar = FALSE, max_pick=10000) {
+    progress_bar = FALSE, max_pick=10000,outputname="Exp1") {
     ## checking errors in the inputs
     if (!is.vector(seed_count)) 
         stop("'seed_count' has to be a number.")
@@ -3212,9 +3212,9 @@
     tab_weight = array(1/nb_simul, nb_simul)
     intermediary_steps = list(NULL)
     if (verbose == TRUE) {
-        write.table(cbind(tab_weight, simul_below_tol), file = "output_step1", row.names = F, 
+        write.table(cbind(tab_weight, simul_below_tol), file = sprintf("%s_output_step1",outputname), row.names = F, 
             col.names = F, quote = F)
-        write.table((seed_count - seed_count_ini), file = "n_simul_tot_step1", row.names = F, 
+        write.table((seed_count - seed_count_ini), file = sprintf("%s_n_simul_tot_step1",outputname), row.names = F, 
             col.names = F, quote = F)
         intermediary_steps[[1]] = list(n_simul_tot = as.numeric(seed_count - seed_count_ini), 
             posterior = as.matrix(cbind(tab_weight, simul_below_tol)))
@@ -3265,9 +3265,9 @@
             }
         }
         if (verbose == TRUE) {
-            write.table(as.matrix(cbind(tab_weight, simul_below_tol)), file = paste("output_step", 
+            write.table(as.matrix(cbind(tab_weight, simul_below_tol)), file = paste(outputname,"_output_step", 
                 it, sep = ""), row.names = F, col.names = F, quote = F)
-            write.table((seed_count - seed_count_ini), file = paste("n_simul_tot_step", 
+            write.table((seed_count - seed_count_ini), file = paste(outputname,"_n_simul_tot_step", 
                 it, sep = ""), row.names = F, col.names = F, quote = F)
             intermediary_steps[[it]] = list(n_simul_tot = as.numeric(seed_count - 
                 seed_count_ini), posterior = as.matrix(cbind(tab_weight, simul_below_tol)))
@@ -3828,7 +3828,7 @@
 ## in each dimension (cf paragraph 3.2 in Del Moral et al. 2012)
 .ABC_Delmoral_cluster <- function(model, prior, prior_test, nb_simul, summary_stat_target, 
     n_cluster, verbose, alpha = 0.9, M = 1, nb_threshold = floor(nb_simul/2), tolerance_target = -1, 
-    dist_weights=NULL, seed_count = 0, progress_bar = FALSE, max_pick=10000) {
+    dist_weights=NULL, seed_count = 0, progress_bar = FALSE, max_pick=10000,outputname="Exp1") {
     ## checking errors in the inputs
     if (!is.vector(alpha)) 
         stop("'alpha' has to be a number.")
@@ -3894,9 +3894,9 @@
     tab_weight2 = .replicate_tab(tab_weight, M)
     intermediary_steps = list(NULL)
     if (verbose == TRUE) {
-        write.table(cbind(tab_weight2, simul_below_tol), file = "output_step1", row.names = F, 
+        write.table(cbind(tab_weight2, simul_below_tol), file = sprintf("%s_output_step1",outputname), row.names = F, 
             col.names = F, quote = F)
-        write.table(as.numeric(seed_count - seed_count_ini), file = "n_simul_tot_step1", 
+        write.table(as.numeric(seed_count - seed_count_ini), file = sprintf("%s_n_simul_tot_step1",outputname), 
             row.names = F, col.names = F, quote = F)
         intermediary_steps[[1]] = list(n_simul_tot = as.numeric(seed_count - seed_count_ini), 
             posterior = as.matrix(cbind(tab_weight2, simul_below_tol)))
@@ -4097,11 +4097,11 @@
         tab_weight = .compute_weight_delmoral(particle_dist_mat, new_tolerance)
         tab_weight2 = .replicate_tab(tab_weight, M)
         if (verbose == TRUE) {
-            write.table(as.numeric(new_tolerance), file = paste("tolerance_step", 
+            write.table(as.numeric(new_tolerance), file = paste(outputname,"_tolerance_step", 
                 kstep, sep = ""), row.names = F, col.names = F, quote = F)
-            write.table(cbind(tab_weight2, simul_below_tol), file = paste("output_step", 
+            write.table(cbind(tab_weight2, simul_below_tol), file = paste(outputname,"_output_step", 
                 kstep, sep = ""), row.names = F, col.names = F, quote = F)
-            write.table(as.numeric(seed_count - seed_count_ini), file = paste("n_simul_tot_step", 
+            write.table(as.numeric(seed_count - seed_count_ini), file = paste(outputname,"_n_simul_tot_step", 
                 kstep, sep = ""), row.names = F, col.names = F, quote = F)
             intermediary_steps[[kstep]] = list(n_simul_tot = as.numeric(seed_count - 
                 seed_count_ini), tol_step = as.numeric(new_tolerance), posterior = as.matrix(cbind(tab_weight2, 
@@ -4605,7 +4605,7 @@
 ## tolerance and proposal range following Wegmann et al. 2009
 .ABC_MCMC2_cluster <- function(model, prior, prior_test, n_obs, n_between_sampling, 
     summary_stat_target, n_cluster, verbose, n_calibration = 10000, tolerance_quantile = 0.01, 
-    proposal_phi = 1, dist_weights=NULL, seed_count = 0, max_pick=100000) {
+    proposal_phi = 1, dist_weights=NULL, seed_count = 0, max_pick=100000,outputname="Exp1") {
     ## checking errors in the inputs
     if (!is.vector(n_calibration)) 
         stop("'n_calibration' has to be a number.")
@@ -4668,9 +4668,9 @@
     dist_ini = simuldist[(ord_sim[n_ini])]
     param_ini = as.matrix(tab_param)[n_ini, ]
     if (verbose == TRUE) {
-        write.table((seed_count - seed_count_ini), file = "n_simul_tot_step1", row.names = F, 
+        write.table((seed_count - seed_count_ini), file = sprintf("%s_n_simul_tot_step1",outputname), row.names = F, 
             col.names = F, quote = F)
-        write.table(NULL, file = "output_mcmc", row.names = F, col.names = F, quote = F)
+        write.table(NULL, file = sprintf("%s_output_mcmc",outputname), row.names = F, col.names = F, quote = F)
         print("initial calibration performed ")
     }
     # chain run
@@ -4679,7 +4679,7 @@
     tab_dist = as.numeric(dist_ini)
     if (verbose == TRUE) {
         intermed = c(as.numeric(param_ini), tab_simul_ini, as.numeric(dist_ini))
-        write(intermed, file = "output_mcmc", ncolumns = length(intermed), append = T)
+        write(intermed, file = sprintf("%s_output_mcmc",outputname), ncolumns = length(intermed), append = T)
     }
     for (is in 2:n_obs) {
         for (i in 1:n_between_sampling) {
@@ -4702,7 +4702,7 @@
         tab_dist = rbind(tab_dist, as.numeric(dist_ini))
         if (verbose == TRUE) {
             intermed = c(as.numeric(param_ini), tab_simul_ini, as.numeric(dist_ini))
-            write(intermed, file = "output_mcmc", ncolumns = length(intermed), append = T)
+            write(intermed, file = sprintf("%s_output_mcmc",outputname), ncolumns = length(intermed), append = T)
             if (is%%100 == 0) {
                 print(paste(is, " ", sep = ""))
             }
@@ -4735,7 +4735,7 @@
 ## are not implemented in the algorithm
 .ABC_MCMC3_cluster <- function(model, prior, prior_test, n_obs, n_between_sampling, 
     summary_stat_target, n_cluster, verbose, n_calibration = 10000, tolerance_quantile = 0.01, 
-    proposal_phi = 1, numcomp = 0, dist_weights=NULL, seed_count = 0, max_pick=100000) {
+    proposal_phi = 1, numcomp = 0, dist_weights=NULL, seed_count = 0, max_pick=100000,outputname='Exp1') {
     ## checking errors in the inputs
     if (!is.vector(n_calibration)) 
         stop("'n_calibration' has to be a number.")
@@ -4800,9 +4800,9 @@
     tab_param = as.matrix(as.matrix(initial)[, 1:nparam])
     tab_simul_summary_stat = as.matrix(initial[, (nparam + 1):(nparam + nstat)])
     if (verbose == TRUE) {
-        write.table((seed_count - seed_count_ini), file = "n_simul_tot_step1", row.names = F, 
+        write.table((seed_count - seed_count_ini), file = sprintf("%s_n_simul_tot_step1",outputname), row.names = F, 
             col.names = F, quote = F)
-        write.table(NULL, file = "output_mcmc", row.names = F, col.names = F, quote = F)
+        write.table(NULL, file = sprintf("%s_output_mcmc",outputname), row.names = F, col.names = F, quote = F)
     }
     ## AM2: PLS step print('AM2 ') standardize the params
     sparam = as.matrix(tab_param)
@@ -4890,7 +4890,7 @@
     tab_dist = as.numeric(dist_ini)
     if (verbose == TRUE) {
         intermed = c(as.numeric(param_ini), tab_simul_ini, as.numeric(dist_ini))
-        write(intermed, file = "output_mcmc", ncolumns = length(intermed), append = T)
+        write(intermed, file = sprintf("%s_output_mcmc",outputname), ncolumns = length(intermed), append = T)
     }
     for (is in 2:n_obs) {
         for (i in 1:n_between_sampling) {
@@ -4929,7 +4929,7 @@
         tab_dist = rbind(tab_dist, as.numeric(dist_ini))
         if (verbose == TRUE) {
             intermed = c(as.numeric(param_ini), tab_simul_ini, as.numeric(dist_ini))
-            write(intermed, file = "output_mcmc", ncolumns = length(intermed), append = T)
+            write(intermed, file = sprintf("%s_output_mcmc",outputname), ncolumns = length(intermed), append = T)
             if (is%%100 == 0) {
                 print(paste(is, " ", sep = ""))
             }

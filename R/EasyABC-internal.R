@@ -1182,8 +1182,9 @@
     tab_weight = rep(1/nb_simul, nb_simul)
     ESS = nb_simul
     uu = (1:nb_simul) * M  # to compute sd_simul with only one simulation per parameter set
-    sd_simul = sapply(as.data.frame(simul_below_tol[uu, (nparam + 1):(nparam + nstat)]), 
-        sd)  # determination of the normalization constants in each dimension associated to each summary statistic, this normalization will not change during all the algorithm
+    # sd_simul = sapply(as.data.frame(simul_below_tol[uu, (nparam + 1):(nparam + nstat)]), 
+    #    sd)  # determination of the normalization constants in each dimension associated to each summary statistic, this normalization will not change during all the algorithm
+    sd_simul = summary_stat_target
     l = dim(simul_below_tol)[2]
     if (M > 1) {
         particle_dist_mat = .compute_dist_M(M, summary_stat_target, as.matrix(as.matrix(simul_below_tol)[, 

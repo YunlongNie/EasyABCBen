@@ -1388,9 +1388,11 @@
                 kstep, sep = ""), row.names = F, col.names = F, quote = F)
             write.table(as.numeric(seed_count - seed_count_ini), file = paste(outputname,"_n_simul_tot_step", 
                 kstep, sep = ""), row.names = F, col.names = F, quote = F)
-            intermediary_steps[[kstep]] = list(n_simul_tot = as.numeric(seed_count - 
-                seed_count_ini), tol_step = as.numeric(new_tolerance), posterior = as.matrix(cbind(tab_weight2, 
-                simul_below_tol)))
+            write.table(as.numeric(ESS), file = paste(outputname,"_ESS_step", 
+                kstep, sep = ""), row.names = F, col.names = F, quote = F)
+            #intermediary_steps[[kstep]] = list(n_simul_tot = as.numeric(seed_count - 
+            #    seed_count_ini), tol_step = as.numeric(new_tolerance), posterior = as.matrix(cbind(tab_weight2, 
+            #    simul_below_tol)))
         }
         if (progress_bar) {
             print(paste("step ", kstep, " completed - tol =", new_tolerance, sep = ""))

@@ -3882,8 +3882,9 @@
     tab_weight = rep(1/nb_simul, nb_simul)
     ESS = nb_simul
     uu = (1:nb_simul) * M  # to compute sd_simul with only one simulation per parameter set
-    sd_simul = sapply(as.data.frame(simul_below_tol[uu, (nparam + 1):(nparam + nstat)]), 
-        sd)  # determination of the normalization constants in each dimension associated to each summary statistic, this normalization will not change during all the algorithm
+    #sd_simul = sapply(as.data.frame(simul_below_tol[uu, (nparam + 1):(nparam + nstat)]), 
+    #    sd)  # determination of the normalization constants in each dimension associated to each summary statistic, this normalization will not change during all the algorithm
+    sd_simul = summary_stat_target
     l = dim(simul_below_tol)[2]
     if (M > 1) {
         particle_dist_mat = .compute_dist_M(M, summary_stat_target, as.matrix(as.matrix(simul_below_tol)[, 
@@ -3901,8 +3902,8 @@
             col.names = F, quote = F)
         write.table(as.numeric(seed_count - seed_count_ini), file = sprintf("%s_n_simul_tot_step1",outputname), 
             row.names = F, col.names = F, quote = F)
-        intermediary_steps[[1]] = list(n_simul_tot = as.numeric(seed_count - seed_count_ini), 
-            posterior = as.matrix(cbind(tab_weight2, simul_below_tol)))
+       # intermediary_steps[[1]] = list(n_simul_tot = as.numeric(seed_count - seed_count_ini), 
+       #     posterior = as.matrix(cbind(tab_weight2, simul_below_tol)))
     }
     if (progress_bar) {
         print("step 1 completed")
@@ -4106,9 +4107,9 @@
                 kstep, sep = ""), row.names = F, col.names = F, quote = F)
             write.table(as.numeric(seed_count - seed_count_ini), file = paste(outputname,"_n_simul_tot_step", 
                 kstep, sep = ""), row.names = F, col.names = F, quote = F)
-            intermediary_steps[[kstep]] = list(n_simul_tot = as.numeric(seed_count - 
-                seed_count_ini), tol_step = as.numeric(new_tolerance), posterior = as.matrix(cbind(tab_weight2, 
-                simul_below_tol)))
+           # intermediary_steps[[kstep]] = list(n_simul_tot = as.numeric(seed_count - 
+           #     seed_count_ini), tol_step = as.numeric(new_tolerance), posterior = as.matrix(cbind(tab_weight2, 
+           #     simul_below_tol)))
         }
         if (progress_bar) {
             print(paste("step ", kstep, " completed - tol =", new_tolerance, sep = ""))
